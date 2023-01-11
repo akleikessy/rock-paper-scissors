@@ -1,47 +1,58 @@
+const buttons = document.querySelectorAll("button");
+let playerScore = 0;
+let computerScore = 0;
+
 //randomly generate Rock, paper or scissors
 function getComputerChoice(){
-    let choice = ["Rock", "Paper", "Scissors"];
+    let choice = ["rock", "paper", "scissors"];
     let randomChoice = choice[Math.floor(Math.random() * choice.length)];
     return randomChoice;
 }
-//console.log(getComputerChoice());
 
-function playRound(playerSelection, computerSelection){
-    if (playerSelection == "Rock" && computerSelection ==  "Paper"){
-        return "You lose! Paper beats Rock";
-    } else if (playerSelection == "Paper" && computerSelection == "Rock"){
-        return "You win! Paper beats Rock";
-    } else if (playerSelection == "Rock" && computerSelection == "Scissors"){
-        return "You win! Rock beats Scissors";
-    } else if (playerSelection == "Scissors" && computerSelection == "Rock"){
-        return "You lose! Rock beats Scissors";
-    } else if (playerSelection == "Paper" && computerSelection == "Scissors"){
-        return "You lose! Scissors beats Paper";
-    } else if (playerSelection == "Scissors" && computerSelection == "Paper"){
-        return "You win! Scissors beats Paper";
-    } else if (playerSelection == computerSelection){
-        return "Draw";
-    }
+function disableButtons(){
+    buttons.forEach( e => {
+        e.disabled = true;
+    });
 }
 
-function game(){
-    for (let i = 0; i < 5; i++){
-        let playerSelection = prompt(
-            "Enter Rock, Paper or Scissors - CaseSensitive"
-        );
+function playRound(playerSelection){
+    
+    let computerSelection = getComputerChoice();
+   
+    let result = "";
+    if ((playerSelection == "rock" && computerSelection ==  "scissors") || 
+        (playerSelection == "scissors" && computerSelection == "paper") ||
+        (playerSelection == "paper" && computerSelection == "rock")){
 
-        //creating three buttons for Rock, Paper and Scissors
-        let rock = document.createElement("button");
-        let rockText = document.createTextNode("Rock");
-        rock.appendChild(rockText);
+            playerScore += 1;
+            result = "You win! <b>" + playerSelection + "</b> beats <b>" + computerSelection +
+                        "</b><br><br>Player score: <b>" + playerScore + "</b><br>Computer score: <b>" 
+                        + computerScore +"</b>";
+        if (playerScore == 5){
+            result += "<br><br> You won the game! Reload the page to play again";
+            disableButtons();
 
-        let computerSelection = getComputerChoice();
-        console.log(playRound(playerSelection, computerSelection));
+        }   
+    } else if (playerSelection == computerSelection) {
+        result = "It's a Draw. You both chose <b>" + playerSelection + 
+                 "</b><br><br> Player score: <b>" + playerScore + "</b><br>Computer score: <b>"
+                 + computerScore +"</b>";
+    } else {
+        computerScore += 1;
+        result = "You lose! <b>" + computerSelection + "</b> beats <b>" + playerSelection +
+                "</b><br><br>Player score: <b>" + playerScore + "</b><br>Computer score: <b>"
+                + computerScore + "</b>";
+        if ( computerScore == 5) {
+            result = "<br><br>I won the game! Reload the page to play again";
+            disableButtons();
+        }
     }
+    
+    document.getElementById("result").innerHTML = result;
 }
-/*
-const playerSelection = "Rock";
-const computerSelection = getComputerChoice(); 
-console.log(playRound(playerSelection, computerSelection));
-*/
-game();
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        playRound(button.id);
+    });
+});

@@ -29,6 +29,12 @@ function game(){
         let playerSelection = prompt(
             "Enter Rock, Paper or Scissors - CaseSensitive"
         );
+
+        //creating three buttons for Rock, Paper and Scissors
+        let rock = document.createElement("button");
+        let rockText = document.createTextNode("Rock");
+        rock.appendChild(rockText);
+
         let computerSelection = getComputerChoice();
         console.log(playRound(playerSelection, computerSelection));
     }
